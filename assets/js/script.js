@@ -2,7 +2,8 @@ var searchBtnEl = $("#searchBtn");
 var searchInputEl = $("#searchInput");
 var cityNameEl = $("#cityTitle");
 var cityTempEl = $("#cityTemp");
-
+var cityWindEl = $("#cityWind");
+var cityHumidEl = $("#cityHumidity");
 
 var lat;
 var lon;
@@ -14,7 +15,6 @@ function fetchResults(event) {
         + searchInputEl.val() + '&appid=6bd526cc976e4af732965c42955fed55'
     console.log(apiCall);
     console.log(searchInputEl.val());
-    // var citySearch =  $("#searchInput").val();
     if (!searchInputEl.val()) {
         alert("Please enter a city");
         return;
@@ -30,12 +30,10 @@ function fetchResults(event) {
 
             //grab the lat and log of the city
             lat = data[0].lat;
-            console.log(lat);
             lon = data[0].lon;
-            console.log(lon);
 
-            var weatherSearch = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&appid=6bd526cc976e4af732965c42955fed55'
-            console.log(weatherSearch);
+            var weatherSearch = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=6bd526cc976e4af732965c42955fed55'
+
             //now that we have a city name, lat, and lon we can get the details
             fetch(weatherSearch)
                 .then(function (response) {
@@ -44,7 +42,12 @@ function fetchResults(event) {
                 .then(function (data) {
                     console.log(data);
 
+                    cityNameEl.text(data.city.name);
+                    cityTempEl.text(data.list[0].main.temp + " F");
+                    cityWindEl.text(data.list[0].wind.speed + " MPH");
+                    cityHumidEl.text(data.list[0].main.humidity + " %");
 
+                    //next need to grab the next 5 days
 
                 });
         });
