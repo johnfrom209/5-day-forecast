@@ -7,8 +7,7 @@ var cityHumidEl = $("#cityHumidity");
 var searchListEl = $(".btnList")
 // var dailyDateEl = $("#dailyDate");
 var dayIcon = $("#dailyIcon");
-//count for search button, limit it to 5
-var count = 0;
+// use moment to grab the date with appropriate format
 var displayTime = moment().format("L");
 
 var lat;
@@ -19,6 +18,8 @@ function fetchResults(event) {
 
     searchInputEl = $("#searchInput").val();
 
+    // this clears the text value in the search input
+    $("#searchInput").val("");
     if (!searchInputEl) {
 
         return;
@@ -75,14 +76,11 @@ function searchApi(city) {
                     var dayIcon = $("<img>", { "src": dailyUrl });
                     dayIcon.attr("lt", "Weather Icon");
 
+                    // main display icon, temp, wind speed, and humidity
                     cityNameEl.append(currentDate).append(dayIcon);
                     cityTempEl.text(data.list[0].main.temp + " F");
                     cityWindEl.text(data.list[0].wind.speed + " MPH");
                     cityHumidEl.text(data.list[0].main.humidity + " %");
-
-                    //next need to grab the next 5 days
-                    //api offers data sets every 3 hour
-                    //every 9th is 24h, so index 8
 
                     $("#forecastText").text("5 Day Forecast");
 
@@ -93,7 +91,6 @@ function searchApi(city) {
                         var daysEl = $("<div>", { "class": "card bg-secondary text-white cardForecast" });
 
                         var daysBody = $("<div>", { "class": "card-body" });
-                        // var daysDate = $("<h5>", { "class": "card-title"})
 
                         //grab code from data
                         // use moment to display the date
@@ -123,78 +120,46 @@ function searchApi(city) {
                         daysEl.append(daysBody);
                         $(".daysForecast").append(daysEl);
                         index += 8;
-
-                        //increment time for moment
-
                     }
-
+                    //reset the time 
+                    displayTime = moment().format("L");
                 });
         });
-
 }
 
 function addSearchBtn(city) {
-    //if btn.searchCity is less than 5 create ele btn
-    var hold = $(".cityBtn");
 
-    if (hold.length < 5) {
-        var temp = $("<button>", { "class": "cityBtn btn btn-secondary m-3 col-8 " })
-        temp.attr("data-city", city);
-        temp.text(city);
-        $(".btnList").append(temp);
+    //first we grab LS
+    var cityArray = [];
+    cityArray = JSON.parse(localStorage.getItem("Cities")) || [];
 
-        //save to LS
-        saveBtnToLS(city);
-
+    if (cityArray.includes(city)) {
+        return;
     }
     else {
-        //jquery for list of .cityBtn and replace at count index
+        // check if cityArray is equal to 5, thats the max I want displayed
+        if (cityArray.length == 5) {
+            // splice the first
+            cityArray.splice(0, 1);
+            // push the new city
+            cityArray.push(city);
 
-        $(".cityBtn").each(function (index) {
-            if (index == count) {
-                $(this).attr("data-city", city);
-                $(this).text(city);
-            }
-        });
-        // [count].attr("data-city", city);
-        // $(".cityBtn")[count].val(city);
-
-        //save to LS
-        //first we grab LS
-        var cityArray = [];
-        cityArray = JSON.parse(localStorage.getItem("Cities"));
-
-        //overwrite the save that is index==count
-        cityArray[count] = city;
-
+            // delete first btn
+            $("body > div.row.w-100 > div.col-3 > div > button:nth-child(1)").remove();
+            createBtnList(city);
+        }
+        else if (cityArray.length < 5) {
+            createBtnList(city);
+            cityArray.push(city);
+        }
         //save new array to LS
         localStorage.setItem("Cities", JSON.stringify(cityArray));
-
-        count += 1;
     };
 
-    if (count == 5) {
-        count = 0;
-    }
-}
 
-function saveBtnToLS(city) {
-    var storedCity = [];
-    // = JSON.parse(localStorage.getItem("Cities"));
-    //if empty
-    if (JSON.parse(localStorage.getItem("Cities")) === null) {
-        storedCity.push(city);
-    }
-    else {
-        storedCity = JSON.parse(localStorage.getItem("Cities"));
-        storedCity.push(city);
-    }
-    //save to LS
-    localStorage.setItem("Cities", JSON.stringify(storedCity));
 }
-
+// grabs the local storage data and sends the cities to be made as button
 function loadBtnfromLS() {
-
     if (JSON.parse(localStorage.getItem("Cities")) === null) {
         return;
     }
@@ -204,9 +169,18 @@ function loadBtnfromLS() {
         tempArray = JSON.parse(localStorage.getItem("Cities"));
 
         for (var i = 0; i < tempArray.length; i++) {
-            addSearchBtn(tempArray[i]);
+            createBtnList(tempArray[i]);
         }
     }
+}
+// this creates the search buttons
+function createBtnList(city) {
+
+    var temp = $("<button>", { "class": "cityBtn btn btn-secondary m-3 col-8" })
+    temp.attr("data-city", city);
+    temp.text(city);
+    $(".btnList").append(temp);
+
 }
 
 //this is the parent class where the search buttons append to
