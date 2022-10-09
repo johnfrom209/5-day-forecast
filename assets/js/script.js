@@ -21,10 +21,11 @@ function fetchResults(event) {
     // this clears the text value in the search input
     $("#searchInput").val("");
     if (!searchInputEl) {
-
+        $(".mainDisplay").remove();
         return;
     }
     else {
+        $(".daysForecast").empty();
         searchApi(searchInputEl);
     }
 }
@@ -35,7 +36,6 @@ function searchApi(city) {
     $(".mainDisplay").removeClass("border-0");
 
     //clear the forecast
-    $(".daysForecast").empty();
 
 
     var apiCall = 'http://api.openweathermap.org/geo/1.0/direct?q='
@@ -47,7 +47,6 @@ function searchApi(city) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
 
             //grab the lat and log of the city
             lat = data[0].lat;
@@ -61,7 +60,6 @@ function searchApi(city) {
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data);
 
                     addSearchBtn(data.city.name);
 
