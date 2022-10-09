@@ -98,7 +98,7 @@ function searchApi(city) {
 
                         //grab the icon from data
                         var daysIconCode = data.list[index].weather[0].icon;
-                        var daysIconUrl = "http://openweathermap.org/img/w/" + daysIconCode + ".png";
+                        var daysIconUrl = "https://openweathermap.org/img/w/" + daysIconCode + ".png";
                         var daysIcon = $("<img>", { "src": daysIconUrl });
                         daysIcon.attr("alt", "Weather icon");
 
