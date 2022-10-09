@@ -7,3 +7,16 @@
 :root {
     --backgroundMain: #fff;
 }
+
+.daysCard {
+    width: 12rem;
+}
+
+.daysForecast {
+    list-style: none;
+    display: inline-block;
+}
+
+.daysForecast li {
+    display: inline-block;
+}
