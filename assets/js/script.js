@@ -6,7 +6,8 @@ var cityWindEl = $("#cityWind");
 var cityHumidEl = $("#cityHumidity");
 // var dailyDateEl = $("#dailyDate");
 var dayIcon = $("#dailyIcon");
-
+//count for search button, limit it to 5
+var count = 0;
 var displayTime = moment().format("L");
 
 var lat;
@@ -22,6 +23,9 @@ function fetchResults(event) {
         alert("Please enter a city");
         return;
     }
+
+    // addSearchBtn(searchInputEl.val());
+
 
     //look for city with the search
     fetch(apiCall)
@@ -44,6 +48,8 @@ function fetchResults(event) {
                 })
                 .then(function (data) {
                     console.log(data);
+
+                    addSearchBtn(data.city.name);
 
                     var currentDate = $("<span>", { "class": "card-title" })
                     currentDate.text(" (" + displayTime + ") ");
@@ -81,7 +87,7 @@ function fetchResults(event) {
 
                         //grab code from data
                         // use moment to display the date
-                        displayTime = moment().add(i + 1, 'd');
+                        displayTime = moment().add(i + 1, 'd').format("L");
                         var forecastDateEl = $("<h5>", { "class:": "card-title" });
                         forecastDateEl.text(displayTime);
 
@@ -114,14 +120,78 @@ function fetchResults(event) {
 
                 });
         });
-
-
-
 }
 
+function addSearchBtn(city) {
+    //if btn.searchCity is less than 5 create ele btn
+    var hold = $(".cityBtn");
+    console.log(hold);
+    //if count is 5 
+    if (hold.length < 5) {
+        var temp = $("<button>", { "class": "cityBtn btn btn-secondary m-3 col-8 " })
+        temp.attr("data-city", city);
+        temp.text(city);
+        $(".btnList").append(temp);
 
+        //save to LS
+        saveBtnToLS(city);
+
+    }
+    else {
+        //jquery for list of .cityBtn and replace at count index
+        $(".cityBtn")[count].attr("data-city", city);
+        $(".cityBtn")[count].val(city);
+
+        //save to LS
+        //first we grab LS
+        var cityArray = [];
+        cityArray = JSON.parse(localStorage.getItem("Cities"));
+
+        //overwrite the save that is index==count
+        cityArray[count] = city;
+
+        //save new array to LS
+        localStorage.setItem("Cities", JSON.stringify(cityArray));
+
+        count += 1;
+    };
+
+    if (count == 5) {
+        count = 0;
+    }
+}
+
+function saveBtnToLS(city) {
+    var storedCity = [];
+    // = JSON.parse(localStorage.getItem("Cities"));
+    //if empty
+    if (JSON.parse(localStorage.getItem("Cities")) === null) {
+        storedCity.push(city);
+    }
+    else {
+        storedCity = JSON.parse(localStorage.getItem("Cities"));
+        storedCity.push(city);
+    }
+    //save to LS
+    localStorage.setItem("Cities", JSON.stringify(storedCity));
+}
+
+function loadBtnfromLS() {
+
+    if (JSON.parse(localStorage.getItem("Cities")) === null) {
+        return;
+    }
+    else {
+        //get the data and loop the to display the btn
+        var tempArray = [];
+        tempArray = JSON.parse(localStorage.getItem("Cities"));
+
+        for (var i = 0; i < tempArray.length; i++) {
+            addSearchBtn(tempArray[i]);
+        }
+    }
+}
+
+loadBtnfromLS();
 searchBtnEl.on("click", fetchResults);
 
-// 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=6bd526cc976e4af732965c42955fed55' +
-//'/?q=' + searchInputEl.val()
-//https://api.openweathermap.org/data/3.0/onecall?lat= +lat + &lon= + lon +&appid=524901&appid=6bd526cc976e4af732965c42955fed55
