@@ -20,7 +20,7 @@ function fetchResults(event) {
     searchInputEl = $("#searchInput").val();
 
     if (!searchInputEl) {
-        alert("Please enter a city");
+
         return;
     }
     else {
@@ -29,6 +29,9 @@ function fetchResults(event) {
 }
 
 function searchApi(city) {
+
+    //enables the border around the display
+    $(".mainDisplay").removeClass("border-0");
 
     //clear the forecast
     $(".daysForecast").empty();
@@ -87,13 +90,10 @@ function searchApi(city) {
                         var index = 8;
 
                         //grab the settings and create the elements
-                        var daysEl = $("<div>", { "class": "card bg-dark text-white col-2 d-inline-block" });
+                        var daysEl = $("<div>", { "class": "card bg-secondary text-white cardForecast" });
 
                         var daysBody = $("<div>", { "class": "card-body" });
                         // var daysDate = $("<h5>", { "class": "card-title"})
-
-                        //in the process of trying to display the next 5 days
-                        var daysImage = $("<h6>", { "class": "card-subtitle mb-2" });
 
                         //grab code from data
                         // use moment to display the date
@@ -209,9 +209,10 @@ function loadBtnfromLS() {
     }
 }
 
+//this is the parent class where the search buttons append to
+// this waits for a click inside of the .cityBtn class to be clicked
 searchListEl.on('click', '.cityBtn', function (event) {
-
-    console.log(event);
+    // using jquery to grab the text of the button and search the api with that
     searchApi($(this).text());
 });
 

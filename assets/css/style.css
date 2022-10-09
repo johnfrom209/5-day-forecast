@@ -1,22 +1,9 @@
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-:root {
-    --backgroundMain: #fff;
-}
-
-.daysCard {
-    width: 12rem;
-}
-
-.daysForecast {
-    list-style: none;
+.cardForecast {
     display: inline-block;
-}
-
-.daysForecast li {
-    display: inline-block;
+    width: 13.6rem;
+    margin: 2.1px;
 }
