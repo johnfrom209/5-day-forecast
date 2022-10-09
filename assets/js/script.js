@@ -15,17 +15,26 @@ var lon;
 
 function fetchResults(event) {
     event.preventDefault()
-    searchInputEl = $("#searchInput");
-    var apiCall = 'http://api.openweathermap.org/geo/1.0/direct?q='
-        + searchInputEl.val() + '&appid=6bd526cc976e4af732965c42955fed55'
 
-    if (!searchInputEl.val()) {
+    searchInputEl = $("#searchInput").val();
+
+    if (!searchInputEl) {
         alert("Please enter a city");
         return;
     }
+    else {
+        searchApi(searchInputEl);
+    }
+}
 
-    // addSearchBtn(searchInputEl.val());
+function searchApi(city) {
 
+    //clear the forecast
+    $(".daysForecast").empty();
+
+
+    var apiCall = 'http://api.openweathermap.org/geo/1.0/direct?q='
+        + city + '&appid=6bd526cc976e4af732965c42955fed55'
 
     //look for city with the search
     fetch(apiCall)
@@ -120,13 +129,13 @@ function fetchResults(event) {
 
                 });
         });
+
 }
 
 function addSearchBtn(city) {
     //if btn.searchCity is less than 5 create ele btn
     var hold = $(".cityBtn");
-    console.log(hold);
-    //if count is 5 
+
     if (hold.length < 5) {
         var temp = $("<button>", { "class": "cityBtn btn btn-secondary m-3 col-8 " })
         temp.attr("data-city", city);
@@ -139,8 +148,15 @@ function addSearchBtn(city) {
     }
     else {
         //jquery for list of .cityBtn and replace at count index
-        $(".cityBtn")[count].attr("data-city", city);
-        $(".cityBtn")[count].val(city);
+
+        $(".cityBtn").each(function (index) {
+            if (index == count) {
+                $(this).attr("data-city", city);
+                $(this).text(city);
+            }
+        });
+        // [count].attr("data-city", city);
+        // $(".cityBtn")[count].val(city);
 
         //save to LS
         //first we grab LS
