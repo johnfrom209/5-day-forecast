@@ -38,7 +38,7 @@ function searchApi(city) {
     //clear the forecast
 
 
-    var apiCall = 'http://api.openweathermap.org/geo/1.0/direct?q='
+    var apiCall = 'https://api.openweathermap.org/geo/1.0/direct?q='
         + city + '&appid=6bd526cc976e4af732965c42955fed55'
 
     //look for city with the search
@@ -69,7 +69,7 @@ function searchApi(city) {
 
                     // cityNameEl.append(currentDate);
                     var iconCode = data.list[0].weather[0].icon;
-                    var dailyUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"
+                    var dailyUrl = "https://openweathermap.org/img/w/" + iconCode + ".png"
 
                     var dayIcon = $("<img>", { "src": dailyUrl });
                     dayIcon.attr("lt", "Weather Icon");
