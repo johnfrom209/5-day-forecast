@@ -4,6 +4,7 @@ var cityNameEl = $("#cityTitle");
 var cityTempEl = $("#cityTemp");
 var cityWindEl = $("#cityWind");
 var cityHumidEl = $("#cityHumidity");
+var searchListEl = $(".btnList")
 // var dailyDateEl = $("#dailyDate");
 var dayIcon = $("#dailyIcon");
 //count for search button, limit it to 5
@@ -207,6 +208,12 @@ function loadBtnfromLS() {
         }
     }
 }
+
+searchListEl.on('click', '.cityBtn', function (event) {
+
+    console.log(event);
+    searchApi($(this).text());
+});
 
 loadBtnfromLS();
 searchBtnEl.on("click", fetchResults);
