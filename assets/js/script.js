@@ -4,7 +4,7 @@ var cityNameEl = $("#cityTitle");
 var cityTempEl = $("#cityTemp");
 var cityWindEl = $("#cityWind");
 var cityHumidEl = $("#cityHumidity");
-var searchListEl = $(".btnList")
+var searchListEl = $(".btnList");
 // var dailyDateEl = $("#dailyDate");
 var dayIcon = $("#dailyIcon");
 // use moment to grab the date with appropriate format
@@ -35,6 +35,7 @@ function searchApi(city) {
     //enables the border around the display
     $(".mainDisplay").removeClass("border-0");
 
+    $(".daysForecast").empty();
     //clear the forecast
 
 
@@ -81,9 +82,9 @@ function searchApi(city) {
                     cityHumidEl.text(data.list[0].main.humidity + " %");
 
                     $("#forecastText").text("5 Day Forecast");
-
+                    var index = 8;
                     for (var i = 0; i < 5; i++) {
-                        var index = 8;
+
 
                         //grab the settings and create the elements
                         var daysEl = $("<div>", { "class": "card bg-secondary text-white cardForecast" });
@@ -184,6 +185,7 @@ function createBtnList(city) {
 //this is the parent class where the search buttons append to
 // this waits for a click inside of the .cityBtn class to be clicked
 searchListEl.on('click', '.cityBtn', function (event) {
+    $(".daysForecast").empty();
     // using jquery to grab the text of the button and search the api with that
     searchApi($(this).text());
 });
