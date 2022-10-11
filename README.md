@@ -5,7 +5,7 @@
 This project allows a user to input a city's name and recieve a 5 day weather forecast. Upon first landing on the page, it may not look like much, but the javascript file simply awaits an input from the user. The javascript file takes the input to display the date,  temperature, wind speed, and humidity. Another function I added was to create a button with the user's input, so they may quickly display the forecast again. This function saves data to the local storage so them may leave the page and the last 5 searches will still be avaliable. 
 
 Here is a screenshot of a city's weather:
-![Screenshot](./assets/images/weatherExample.png)
+![Screenshot](./assets/images/forecast.png)
 
 
 This is the function I used to create a button based off the users input. I pass the function a string that is equal to the city that they searched and it creates a new button on the page. 
