@@ -82,7 +82,7 @@ function searchApi(city) {
                     cityHumidEl.text(data.list[0].main.humidity + " %");
 
                     $("#forecastText").text("5 Day Forecast");
-                    var index = 8;
+                    var index = 7;
                     for (var i = 0; i < 5; i++) {
 
 
